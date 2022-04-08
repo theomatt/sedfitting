@@ -505,8 +505,8 @@ if __name__ == '__main__':
     z_free=True
     if z_selection=='ALL':
         if z_free:
-            phototab_out.write('./PhotZ/QSO_PhotZ_out_zfree.fits', overwrite=True)
+            phototab_out.write('./PhotZ/QSO_PhotZ_out_zfree-norm.fits', overwrite=True)
         else:
-            phototab_out.write('./PhotZ/QSO_PhotZ_out_zfixed.fits', overwrite=True)
+            phototab_out.write('./PhotZ/QSO_PhotZ_out_zfixed-norm.fits', overwrite=True)
     elif z_selection=='TEST':
-        phototab_out.write('./PhotZ/TargetsTNG_out.fits', overwrite=True)    
+        phototab_out.write('./PhotZ/TargetsTNG_out-norm.fits', overwrite=True)    
