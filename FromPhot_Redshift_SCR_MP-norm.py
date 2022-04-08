@@ -474,7 +474,7 @@ import pandas as pd
 if __name__ == '__main__':
     z_selection='ALL'
     if z_selection=='ALL':
-        phot_file='./QSO_Bright2.fits'
+        phot_file='./QSO_Bright4.fits'
     elif z_selection=='TEST':
         phot_file='./TargetsTNG.fits'
     else:
