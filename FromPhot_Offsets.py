@@ -461,7 +461,7 @@ if __name__ == '__main__':
     else:
         raise(Exception('Please select a subset'))    
     hdu_list = fits.open(phot_file, memmap=True)
-    phototab_in = Table(hdu_list[1].data)
+    phototab_in = Table(hdu_list[1].data)[0:3]
     hdu_list.close()
     
     mag_names=['gaia_BP', 'gaia_G', 'gaia_RP',
