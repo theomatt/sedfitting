@@ -84,9 +84,7 @@ def init_lock(l):
     global lock
     lock=l
     
-def photometric_offset(input_list):
-    phototab=input_list[0]
-    offset_band=input_list[1]
+def photometric_offset(phototab,offset_band):
     #lock.acquire()
     wsed, flsedA = read_sed_file('QSOsedA.dat')
     wsed, flsedB = read_sed_file('QSOsedB.dat')
@@ -461,7 +459,7 @@ if __name__ == '__main__':
     else:
         raise(Exception('Please select a subset'))    
     hdu_list = fits.open(phot_file, memmap=True)
-    phototab_in = Table(hdu_list[1].data)[0:3]
+    phototab_in = Table(hdu_list[1].data)
     hdu_list.close()
     
     mag_names=['gaia_BP', 'gaia_G', 'gaia_RP',
@@ -478,13 +476,13 @@ if __name__ == '__main__':
     if True:
         input_list=[]
         for band in mag_names:
-            input_list.append([phototab_in.copy(), band])
+            input_list.append((phototab_in.copy(), band))
             
         proc_num=4
         l=mp.Lock()
         p = mp.Pool(processes = proc_num, initializer=init_lock, initargs=(l,))
         start = time.time()
-        async_result = p.map_async(photometric_offset, input_list)
+        async_result = p.starmap_async(photometric_offset, input_list)
         p.close()
         p.join()
         print("Complete")
