@@ -475,11 +475,16 @@ if __name__ == '__main__':
     phototab_in = Table(hdu_list[1].data)
     hdu_list.close()
     
-    mag_names=['SDSS_DR16Q_mag_u', 'SDSS_DR16Q_mag_g', 'SDSS_DR16Q_mag_r', 'SDSS_DR16Q_mag_i', 'SDSS_DR16Q_mag_z',
+    mag_names=['gaia_BP', 'gaia_G', 'gaia_RP',
+               'mag_J', 'mag_H', 'mag_K',
+               'unwise_w1', 'unwise_w2','wise_w3', 'wise_w4',
+               'Q1_SkyM11_mag_u', 'Q1_SkyM11_mag_v', 'Q1_SkyM11_mag_g', 'Q1_SkyM11_mag_r', 'Q1_SkyM11_mag_i', 'Q1_SkyM11_mag_z',
+               'Q1_SkyM3_mag_u', 'Q1_SkyM3_mag_v', 'Q1_SkyM3_mag_g', 'Q1_SkyM3_mag_r', 'Q1_SkyM3_mag_i', 'Q1_SkyM3_mag_z',
+               'SDSS_DR14Q_mag_u', 'SDSS_DR14Q_mag_g', 'SDSS_DR14Q_mag_r', 'SDSS_DR14Q_mag_i', 'SDSS_DR14Q_mag_z',
+               'SDSS_DR16Q_mag_u', 'SDSS_DR16Q_mag_g', 'SDSS_DR16Q_mag_r', 'SDSS_DR16Q_mag_i', 'SDSS_DR16Q_mag_z',
                'PanSTARRS1DR2_mag_g', 'PanSTARRS1DR2_mag_r', 'PanSTARRS1DR2_mag_i', 'PanSTARRS1DR2_mag_z', 'PanSTARRS1DR2_mag_Y',
                'jPetroMag', 'hPetroMag', 'ksPetroMag',
-               'NUVmag']    
-    
+               'NUVmag']
     if True:
         input_list=[]
         for band in mag_names:
