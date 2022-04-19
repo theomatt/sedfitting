@@ -345,27 +345,34 @@ def photometric_offset(phototab,offset_band):
         bloo = []
         bupo = []
         for m in range (0, len(w)):
-            if np.isfinite(lfl[m]) and abs(lfl[m])<50 and abs(lfl[m])>2 :
+            if np.isfinite(lfl[m]) and abs(lfl[m])<50 and abs(lfl[m])>2:
                 wo.append(w[m])
                 lflo.append(lfl[m])
                 erro.append(err[m])
                 stdo.append(stdev[m])
                 bloo.append(blo[m])
                 bupo.append(bup[m])
+                if m!=offset_idx:
+                #per il fit devo usare degli array senza la banda di cui devo calcolare l'offset
+                    wo2.append(w[m])
+                    lflo2.append(lfl[m])
+                    erro2.append(err[m])
+                    stdo2.append(stdev[m])
+                    bloo2.append(blo[m])
+                    bupo2.append(bup[m])
+            
         wo = np.array(wo)
         lflo = np.array(lflo)
         erro = np.array(erro)
         stdo = np.array(stdo)
         bloo = np.array(bloo)
         bupo = np.array(bupo)
-        
-        #per il fit devo usare degli array senza la banda di cui devo calcolare l'offset
-        wo2 = np.delete(wo, offset_idx)
-        lflo2 = np.delete(lflo, offset_idx)
-        erro2 = np.delete(erro, offset_idx)
-        stdo2 = np.delete(stdo, offset_idx)
-        bloo2 = np.delete(bloo, offset_idx)
-        bupo2 = np.delete(bupo, offset_idx)
+        wo2 = np.array(wo)
+        lflo2 = np.array(lflo2)
+        erro2 = np.array(erro2)
+        stdo2 = np.array(stdo2)
+        bloo2 = np.array(bloo2)
+        bupo2 = np.array(bupo2)
         
         #PERFORM FIT
         z_free=False
@@ -462,13 +469,7 @@ if __name__ == '__main__':
     phototab_in = Table(hdu_list[1].data)
     hdu_list.close()
     
-    mag_names=['gaia_BP', 'gaia_G', 'gaia_RP',
-               'mag_J', 'mag_H', 'mag_K',
-               'unwise_w1', 'unwise_w2','wise_w3', 'wise_w4',
-               'Q1_SkyM11_mag_u', 'Q1_SkyM11_mag_v', 'Q1_SkyM11_mag_g', 'Q1_SkyM11_mag_r', 'Q1_SkyM11_mag_i', 'Q1_SkyM11_mag_z',
-               'Q1_SkyM3_mag_u', 'Q1_SkyM3_mag_v', 'Q1_SkyM3_mag_g', 'Q1_SkyM3_mag_r', 'Q1_SkyM3_mag_i', 'Q1_SkyM3_mag_z',
-               'SDSS_DR14Q_mag_u', 'SDSS_DR14Q_mag_g', 'SDSS_DR14Q_mag_r', 'SDSS_DR14Q_mag_i', 'SDSS_DR14Q_mag_z',
-               'SDSS_DR16Q_mag_u', 'SDSS_DR16Q_mag_g', 'SDSS_DR16Q_mag_r', 'SDSS_DR16Q_mag_i', 'SDSS_DR16Q_mag_z',
+    mag_names=['SDSS_DR16Q_mag_u', 'SDSS_DR16Q_mag_g', 'SDSS_DR16Q_mag_r', 'SDSS_DR16Q_mag_i', 'SDSS_DR16Q_mag_z',
                'PanSTARRS1DR2_mag_g', 'PanSTARRS1DR2_mag_r', 'PanSTARRS1DR2_mag_i', 'PanSTARRS1DR2_mag_z', 'PanSTARRS1DR2_mag_Y',
                'jPetroMag', 'hPetroMag', 'ksPetroMag',
                'NUVmag']    
@@ -478,7 +479,7 @@ if __name__ == '__main__':
         for band in mag_names:
             input_list.append((phototab_in.copy(), band))
             
-        proc_num=4
+        proc_num=10
         l=mp.Lock()
         p = mp.Pool(processes = proc_num, initializer=init_lock, initargs=(l,))
         start = time.time()
