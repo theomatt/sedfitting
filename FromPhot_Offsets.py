@@ -344,6 +344,12 @@ def photometric_offset(phototab,offset_band):
         stdo  = []
         bloo = []
         bupo = []
+        wo2 = []
+        lflo2 = []
+        erro2 = []
+        stdo2  = []
+        bloo2 = []
+        bupo2 = []
         for m in range (0, len(w)):
             if np.isfinite(lfl[m]) and abs(lfl[m])<50 and abs(lfl[m])>2:
                 wo.append(w[m])
@@ -367,7 +373,7 @@ def photometric_offset(phototab,offset_band):
         stdo = np.array(stdo)
         bloo = np.array(bloo)
         bupo = np.array(bupo)
-        wo2 = np.array(wo)
+        wo2 = np.array(wo2)
         lflo2 = np.array(lflo2)
         erro2 = np.array(erro2)
         stdo2 = np.array(stdo2)
