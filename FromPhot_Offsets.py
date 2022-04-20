@@ -350,6 +350,7 @@ def photometric_offset(phototab,offset_band):
         stdo2  = []
         bloo2 = []
         bupo2 = []
+        empty_bands=0
         for m in range (0, len(w)):
             if np.isfinite(lfl[m]) and abs(lfl[m])<50 and abs(lfl[m])>2:
                 wo.append(w[m])
@@ -366,6 +367,9 @@ def photometric_offset(phototab,offset_band):
                     stdo2.append(stdev[m])
                     bloo2.append(blo[m])
                     bupo2.append(bup[m])
+            elif m<offset_idx:
+            #count empty bands that appear before the offset band
+                empty_bands+=1
             
         wo = np.array(wo)
         lflo = np.array(lflo)
@@ -379,6 +383,13 @@ def photometric_offset(phototab,offset_band):
         stdo2 = np.array(stdo2)
         bloo2 = np.array(bloo2)
         bupo2 = np.array(bupo2)
+        
+        #l'indice della banda di cui calcolare l'offset per l'array "ripulito" wo
+        offset_idx_new=offset_idx-empty_bands
+        #controllo che il nuovo indice sia stato definito bene
+        if w[offset_idx]!=wo[offset_idx_new]:
+            raise Exception("Error: offset band mismatch. Check definition of offset_idx_new")
+        
         
         #PERFORM FIT
         z_free=False
@@ -424,7 +435,7 @@ def photometric_offset(phototab,offset_band):
         photfit = phot_from_sed_AB(wo, stdo, bloo, bupo, wsed, flsedA, flsedB, z1fit[i], r_fit[i], n_fit[i], s_fit[i], IGM_tau)
         # in photfit il fit ottimale
         #calcolo la differenza tra il fit e la magnitudine osservata
-        offset[i] = (photfit[offset_idx]-lf[offset_idx])
+        offset[i] = (photfit[offset_idx_new]-lf[offset_idx_new])
     #
     z_fit = np.array(z1fit)-1.
     phototab_out = phototab
