@@ -517,7 +517,7 @@ if __name__ == '__main__':
     l=mp.Lock()
     p = mp.Pool(processes = proc_num, initializer=init_lock, initargs=(l,))
     start = time.time()
-    async_result = p.starmap_async(photometric_offset, input_list)
+    async_result = p.starmap_async(photometric_redshift, input_list)
     p.close()
     p.join()
     print("Complete")
