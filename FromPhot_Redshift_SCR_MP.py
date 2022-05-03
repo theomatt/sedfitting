@@ -125,6 +125,8 @@ def photometric_redshift(phototab):
     3565.05, 4700.33, 6174.48, 7533.63, 8781.69,
     # PAN-STARRS
     4900.12, 6241.28, 7563.76, 8690.10, 9644.63,
+    #DES
+    4730, 6420, 7840, 9260, 10090,
     # VISTA VHS http://casu.ast.cam.ac.uk/surveys-projects/vista/technical/filter-set
     #http://svo2.cab.inta-csic.es/svo/theory/fps3/index.php?&mode=search&search_text=vista
     12523.90, 16449.01, 21460.39,
@@ -147,6 +149,8 @@ def photometric_redshift(phototab):
     582.28, 1262.68, 1149.52, 1238.95, 994.39,
     #PanSTARRS                 
     1053.08, 1252.41, 1206.63, 997.71, 638.99,
+    #DES
+    1500, 1480, 1470, 1520, 1120,
     #VISTA VHS
     #1720.0, 2910.0, 3090.0, 
     1725.17, 2905.59, 3075.13,
@@ -172,6 +176,8 @@ def photometric_redshift(phototab):
                 3048.28, 3782.54, 5415.34, 6689.47, 7960.44,
     #PanSTARRS      3943.40, 5386.23, 6778.45, 8028.00, 9100.50,
                 3990., 5445.,  6850., 8115., 9150.,        
+    #DES
+                3980, 5680, 7100, 8500, 9530, 
     #VISTA VHS      11000., 19500.,
     #                11035., 19790.,  
                 11429.84, 14637.16, 19388.52,
@@ -194,6 +200,8 @@ def photometric_redshift(phototab):
                 4028.23, 5549.26, 6989.14, 8389.45, 10833.25,
     #PanSTARRS      5593.27, 7035.65, 8304.37, 9346.00, 10838.50,
                 5545., 6965., 8245., 9275., 10330., 
+    #DES
+                5480, 7160, 8570, 10020, 10650,    
     #VISTA VHS      14000., 23500.,
     #                13510., 23525.,
                 13668.39, 18340.58, 23661.88,
@@ -271,12 +279,18 @@ def photometric_redshift(phototab):
         fl[34] = phototab['PanSTARRS1DR2_mag_i'][i]
         fl[35] = phototab['PanSTARRS1DR2_mag_z'][i]
         fl[36] = phototab['PanSTARRS1DR2_mag_Y'][i]
+        #DES
+        fl[37] = phototab['DES_Y3_GOLD_mag_g'][i]
+        fl[38] = phototab['DES_Y3_GOLD_mag_r'][i]
+        fl[39] = phototab['DES_Y3_GOLD_mag_i'][i]
+        fl[40] = phototab['DES_Y3_GOLD_mag_z'][i]
+        fl[41] = phototab['DES_Y3_GOLD_mag_Y'][i]
         # VIS VHS http://casu.ast.cam.ac.uk/surveys-projects/vista/technical/filter-set
-        fl[37] = phototab['jPetroMag'][i]+0.916
-        fl[38] = phototab['hPetroMag'][i]+1.366
-        fl[39] = phototab['ksPetroMag'][i]+1.827
+        fl[42] = phototab['jPetroMag'][i]+0.916
+        fl[43] = phototab['hPetroMag'][i]+1.366
+        fl[44] = phototab['ksPetroMag'][i]+1.827
         # GALEX
-        fl[40] = phototab['NUVmag'][i]
+        fl[45] = phototab['NUVmag'][i]
         #
         fl = np.array(fl)
         # IN FL CI SONO MAGNITUDINI AB
@@ -319,10 +333,15 @@ def photometric_redshift(phototab):
         err[34] = phototab['PanSTARRS1DR2_mag_i_err'][i]
         err[35] = phototab['PanSTARRS1DR2_mag_z_err'][i]
         err[36] = phototab['PanSTARRS1DR2_mag_Y_err'][i]
-        err[37] = phototab['jPetroMagErr'][i]
-        err[38] = phototab['hPetroMagErr'][i]
-        err[39] = phototab['ksPetroMagErr'][i]
-        err[40] = phototab['e_NUVmag'][i]
+        err[37] = phototab['DES_Y3_GOLD_mag_g_err'][i]
+        err[38] = phototab['DES_Y3_GOLD_mag_r_err'][i]
+        err[39] = phototab['DES_Y3_GOLD_mag_i_err'][i]
+        err[40] = phototab['DES_Y3_GOLD_mag_z_err'][i]
+        err[41] = phototab['DES_Y3_GOLD_mag_Y_err'][i]
+        err[42] = phototab['jPetroMagErr'][i] 
+        err[43] = phototab['hPetroMagErr'][i]
+        err[44] = phototab['ksPetroMagErr'][i]
+        err[45] = phototab['e_NUVmag'][i]
         # CHECK ERRORS - must be > emagmin.
         emagmin = 0.1
         for ee in range (0, len(err)):
@@ -404,7 +423,11 @@ def photometric_redshift(phototab):
         lwzsed = np.log10(wzsed)
 
         #REPEAT FIT WITH FIXED Z
-        repeat2=z_free
+        if z_selection=='TEST':
+            repeat2=False
+        else:
+            repeat2=z_free
+        
         if repeat2:
             params = Parameters()
             params.add('zf1', value=(z_spec[i]+1.), vary=False)         
@@ -468,11 +491,11 @@ import pandas as pd
 
 ##################   SET INITIAL OPTIONS   ###################
 if __name__ == '__main__':
-    z_selection='ALL'
+    z_selection='TEST'
     if z_selection=='ALL':
-        phot_file='./QSO_Bright4.fits'
+        phot_file='QSO_Bright4.fits'
     elif z_selection=='TEST':
-        phot_file='./TargetsTNG.fits'
+        phot_file='Candidates_PS_in.fits'
     else:
         raise(Exception('Please select a subset'))    
     hdu_list = fits.open(phot_file, memmap=True)
@@ -480,10 +503,10 @@ if __name__ == '__main__':
     hdu_list.close()
     
     #remove objects without w1 magnitude
-    mask=np.isfinite(phototab_in['unwise_w1'])
-    phototab_in=phototab_in[mask]
+    #mask=np.isfinite(phototab_in['unwise_w1'])
+    #phototab_in=phototab_in[mask]
     
-    proc_num=4
+    proc_num=6
     phototabs_list=[Table.from_pandas(np.array_split(phototab_in.to_pandas(), proc_num)[i]) for i in range(proc_num)]
     l=mp.Lock()
     p = mp.Pool(processes = proc_num, initializer=init_lock, initargs=(l,))
@@ -505,4 +528,5 @@ if __name__ == '__main__':
         else:
             phototab_out.write('./PhotZ/QSO_PhotZ_out_zfixed.fits', overwrite=True)
     elif z_selection=='TEST':
-        phototab_out.write('./PhotZ/TargetsTNG_out.fits', overwrite=True)    
+        file_out='PhotZ/'+ phot_file.strip('.fits')[0:-2] +'out.fits'
+        phototab_out.write(file_out, overwrite=True)    
