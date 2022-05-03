@@ -105,7 +105,8 @@ def photometric_redshift(phototab, z_selection):
     
     nrow = len(phototab)
     id = phototab['qid']
-    z_spec = phototab['z_spec']
+    z_spec = phototab['mlz_spec']
+    #z_spec = phototab['z_spec']
     nbands=46
     w = [None] * nbands
     fl = [None] * nbands
@@ -424,7 +425,7 @@ def photometric_redshift(phototab, z_selection):
 
         #REPEAT FIT WITH FIXED Z
         if z_selection=='TEST':
-            repeat2=False
+            repeat2=True
         else:
             repeat2=z_free
         
