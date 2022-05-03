@@ -106,7 +106,7 @@ def photometric_redshift(phototab):
     nrow = len(phototab)
     id = phototab['qid']
     z_spec = phototab['z_spec']
-    nbands=41
+    nbands=46
     w = [None] * nbands
     fl = [None] * nbands
     err = [None] * nbands
