@@ -84,7 +84,7 @@ def init_lock(l):
     global lock
     lock=l
     
-def photometric_redshift(phototab):
+def photometric_redshift(phototab, z_selection):
     lock.acquire()
     wsed, flsedA = read_sed_file('QSOsedA.dat')
     wsed, flsedB = read_sed_file('QSOsedB.dat')
@@ -507,11 +507,17 @@ if __name__ == '__main__':
     #phototab_in=phototab_in[mask]
     
     proc_num=6
-    phototabs_list=[Table.from_pandas(np.array_split(phototab_in.to_pandas(), proc_num)[i]) for i in range(proc_num)]
+    input_list=[]
+    id_blocks=np.array_split(np.arange(len(phototab_in)),proc_num)
+    for i in range(proc_num):
+        id_low=id_blocks[i][0]
+        id_high=id_blocks[i][-1]
+        input_list.append((phototab_in[id_low:id_high].copy(), z_selection))
+
     l=mp.Lock()
     p = mp.Pool(processes = proc_num, initializer=init_lock, initargs=(l,))
     start = time.time()
-    async_result = p.map_async(photometric_redshift, phototabs_list)
+    async_result = p.starmap_async(photometric_offset, input_list)
     p.close()
     p.join()
     print("Complete")
