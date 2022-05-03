@@ -132,7 +132,7 @@ def photometric_redshift(phototab):
     12523.90, 16449.01, 21460.39,
     # GALEX
     2297
-                     ])
+                     ]) 
     #BAND WIDTH 
     fwhm = np.array([
     #GAIA   
