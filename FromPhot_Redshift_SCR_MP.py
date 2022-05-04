@@ -512,7 +512,7 @@ if __name__ == '__main__':
     id_blocks=np.array_split(np.arange(len(phototab_in)),proc_num)
     for i in range(proc_num):
         id_low=id_blocks[i][0]
-        id_high=id_blocks[i][-1]
+        id_high=id_blocks[i][-1]+1
         input_list.append((phototab_in[id_low:id_high].copy(), z_selection))
 
     l=mp.Lock()
