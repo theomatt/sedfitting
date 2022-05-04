@@ -507,7 +507,7 @@ if __name__ == '__main__':
     #mask=np.isfinite(phototab_in['unwise_w1'])
     #phototab_in=phototab_in[mask]
     
-    proc_num=6
+    proc_num=9
     input_list=[]
     id_blocks=np.array_split(np.arange(len(phototab_in)),proc_num)
     for i in range(proc_num):
